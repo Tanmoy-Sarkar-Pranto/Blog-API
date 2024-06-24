@@ -15,11 +15,13 @@ router = APIRouter(
 #Classes
 class CreateUser(BaseModel):
     email: EmailStr
+    username: str
     password: str
 
 class ResponseUser(BaseModel):
     id: int
     email: EmailStr
+    username: str
     created_at: datetime
 
     class Config:
@@ -31,9 +33,13 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseUser)
 async def create_user(user: CreateUser, db: db_dependency):
-    old_user = db.query(User).filter(User.email == user.email).first()
-    if old_user:
+    old_user_email = db.query(User).filter(User.email == user.email).first()
+    if old_user_email:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"User with email: {user.email} already exists")
+    
+    old_user_username = db.query(User).filter(User.username == user.username).first()
+    if old_user_username:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Username already taken")
     
     hashed_password = password_context.hash(user.password)
     user.password = hashed_password

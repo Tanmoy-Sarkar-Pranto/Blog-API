@@ -21,6 +21,7 @@ venv
 docs.zip
 archive.zip
 blog-env/
+.env
 # vim temporary files
 *~
 .*.sw?

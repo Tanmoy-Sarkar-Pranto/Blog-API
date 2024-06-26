@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.models import User
 from passlib.context import CryptContext
 from datetime import datetime
-from app.oauth2 import create_access_token
+from app import oauth2
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 db_dependency = Annotated[Session, Depends(get_db)]
@@ -39,9 +39,16 @@ class ResponseUser(BaseModel):
     class Config:
         from_attributes = True
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class PayloadToken(BaseModel):
+    user_id: int
+    username: str
 # Functions
 
-@router.post('/login', status_code=status.HTTP_200_OK)
+@router.post('/login', status_code=status.HTTP_200_OK, response_model=Token)
 async def login(db: db_dependency,user: OAuth2PasswordRequestForm = Depends()):
     registered_user = db.query(User).filter(User.username == user.username).first()
     if not registered_user:
@@ -52,5 +59,5 @@ async def login(db: db_dependency,user: OAuth2PasswordRequestForm = Depends()):
     if not is_same_password:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Credentials")
     
-    token = create_access_token(data={"user_id": registered_user.id, "username": registered_user.username})
-    return {"token": token, "type": "Bearer"}
+    token = oauth2.create_access_token(data={"user_id": registered_user.id, "username": registered_user.username})
+    return {'access_token': token,'token_type':'bearer'}

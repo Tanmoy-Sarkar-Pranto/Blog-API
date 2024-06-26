@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 from ..database import SessionLocal, get_db
 from ..models import User
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 from datetime import datetime
 from passlib.context import CryptContext
 
@@ -17,6 +17,7 @@ class CreateUser(BaseModel):
     email: EmailStr
     username: str
     password: str
+    phone_number: Optional[str]
 
 class ResponseUser(BaseModel):
     id: int

@@ -4,6 +4,7 @@ This is a simple blog API built with FastAPI. It features user authentication wi
 
 # Live
 Live url : [Live](https://blog-api-kf6c.onrender.com/docs)
+(As I have used free tier in Render, it may take some time to boot up the server)
 - For deploying the api I have used [Render](https://render.com/)
 - For deploying postgresql databsae I have used [Tembo](https://tembo.io/)
 

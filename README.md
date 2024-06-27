@@ -2,6 +2,11 @@
 
 This is a simple blog API built with FastAPI. It features user authentication with JWT tokens, user registration, post creation, post deletion, post updating and vote functionality.
 
+# Live
+Live url : [Live](https://blog-api-kf6c.onrender.com/docs)
+- For deploying the api I have used [Render](https://render.com/)
+- For deploying postgresql databsae I have used [Tembo](https://tembo.io/)
+
 ## Features
 
 - User authentication
